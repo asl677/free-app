@@ -36,7 +36,6 @@ const itemVariants = {
 }
 
 interface TimeTrackingProps {
-  onNavigate: (page: any) => void
   contracts?: any[]
   selectedContractId?: number | null
   onSelectContract?: (id: number | null) => void
@@ -48,7 +47,7 @@ interface TimeTrackingProps {
   entries?: any[]
 }
 
-export default function TimeTracking({ onNavigate, contracts = [], selectedContractId = null, onSelectContract, isRunning = false, time = 0, onStart, onStop, onSaveEntry, entries = [] }: TimeTrackingProps) {
+export default function TimeTracking({ contracts = [], selectedContractId = null, onSelectContract, isRunning = false, time = 0, onStart, onStop, onSaveEntry, entries = [] }: TimeTrackingProps) {
   const timeRef = useRef(0)
 
   useEffect(() => {

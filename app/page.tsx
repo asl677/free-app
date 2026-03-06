@@ -181,7 +181,7 @@ export default function Home() {
             if (p === 'contracts') setShowCreateContract(true)
             else setCurrentPage(p as PageType)
           }} contracts={contracts} onDeleteContract={handleDeleteContract} onTrackTime={handleTrackTime} />}
-          {currentPage === 'time' && <TimeTracking onNavigate={setCurrentPage} contracts={contracts} selectedContractId={selectedContractId} onSelectContract={setSelectedContractId} isRunning={isTimerRunning} time={timerSeconds} onStart={handleStartTimer} onStop={handleStopTimer} onSaveEntry={handleSaveTimeEntry} entries={entries} />}
+          {currentPage === 'time' && <TimeTracking contracts={contracts} selectedContractId={selectedContractId} onSelectContract={setSelectedContractId} isRunning={isTimerRunning} time={timerSeconds} onStart={handleStartTimer} onStop={handleStopTimer} onSaveEntry={handleSaveTimeEntry} entries={entries} />}
           {currentPage === 'settings' && <Settings onClearEntries={() => { setTotalTime('0h 0m'); setTimerSeconds(0); timerRef.current = 0 }} />}
         </motion.div>
       </main>
