@@ -7,7 +7,7 @@ import {
   FileTextIcon,
   TimerIcon,
   GearIcon,
-  BriefcaseIcon,
+  RocketIcon,
 } from '@radix-ui/react-icons'
 
 interface NavigationProps {
@@ -19,7 +19,7 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', Icon: HomeIcon },
     { id: 'contracts', label: 'Contracts', Icon: FileTextIcon },
-    { id: 'jobs', label: 'Jobs', Icon: BriefcaseIcon },
+    { id: 'jobs', label: 'Jobs', Icon: RocketIcon },
     { id: 'time', label: 'Time', Icon: TimerIcon },
     { id: 'settings', label: 'Settings', Icon: GearIcon },
   ] as const
