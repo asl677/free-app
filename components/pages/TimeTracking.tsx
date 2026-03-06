@@ -2,6 +2,18 @@
 
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { PlayIcon, StopIcon } from '@radix-ui/react-icons'
+
+const selectStyle = `
+  select {
+    background-color: white !important;
+    color: black !important;
+  }
+  select option {
+    background-color: white !important;
+    color: black !important;
+  }
+`
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -51,14 +63,12 @@ export default function TimeTracking({ contracts = [], selectedContractId = null
 
   return (
     <div className="w-full">
+      <style>{selectStyle}</style>
       <motion.h1 variants={itemVariants} initial="hidden" animate="visible"
         className="sticky top-0 bg-dark z-40 px-4 md:px-8 py-8 text-4xl font-light"
       >
         Time Tracking
       </motion.h1>
-
-      <div className="px-4 md:px-8 py-4">
-
 
       <motion.div className="fixed top-8 right-8 z-30">
         <div className="text-7xl text-mint font-sans font-medium tracking-tight">
@@ -66,6 +76,78 @@ export default function TimeTracking({ contracts = [], selectedContractId = null
         </div>
       </motion.div>
 
+      <div className="px-4 md:px-8 py-4">
+
+      <motion.div variants={itemVariants} initial="hidden" animate="visible"
+        className="bg-surface pl-0 pr-0 py-0 mb-0"
+      >
+        <label className="block text-left text-dark font-mono text-sm mb-2">SELECT CONTRACT</label>
+        <select
+          value={selectedContractId || ''}
+          onChange={(e) => onSelectContract?.(e.target.value ? Number(e.target.value) : null)}
+          className="w-full px-4 py-3 border border-black bg-white text-black font-mono text-sm focus:outline-none focus:border-black focus:ring-0"
+          style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
+        >
+          <option value="">Choose a contract</option>
+          {contracts.map((contract) => (
+            <option key={contract.id} value={contract.id}>
+              {contract.client} - {contract.rate}
+            </option>
+          ))}
+        </select>
+      </motion.div>
+
+      <motion.div variants={itemVariants} initial="hidden" animate="visible"
+        className="bg-surface p-4 mb-4 text-center"
+      >
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => {
+              if (isRunning) {
+                const h = Math.floor(timeRef.current / 3600)
+                const m = Math.floor((timeRef.current % 3600) / 60)
+                const s = timeRef.current % 60
+                const durationStr = `${h}h ${m}m ${s}s`
+                const rateStr = selectedContract?.rate || '$0/hr'
+                const rateNum = parseFloat(rateStr.replace(/[^0-9.]/g, '')) || 0
+                const totalTime = timeRef.current / 3600
+                const earnings = isNaN(rateNum) ? '0.00' : (rateNum * totalTime).toFixed(2)
+                const newEntry = {
+                  id: Date.now(),
+                  contract: selectedContract?.client || 'Contract',
+                  duration: durationStr,
+                  rate: rateStr,
+                  earnings: `$${earnings}`
+                }
+                onSaveEntry?.(newEntry)
+                onStop?.()
+              } else if (selectedContractId) {
+                onStart?.()
+              }
+            }}
+            disabled={!isRunning && !selectedContractId}
+            className={`px-8 py-4  font-mono font-medium flex items-center gap-2 ${
+              isRunning
+                ? 'bg-coral text-dark hover:bg-coral/90'
+                : selectedContractId ? 'bg-mint text-dark hover:bg-mint/90' : 'bg-cream/30 text-dark cursor-not-allowed'
+            }`}
+          >
+            {isRunning ? (
+              <>
+                <StopIcon width={20} height={20} />
+                Stop
+              </>
+            ) : (
+              <>
+                <PlayIcon width={20} height={20} />
+                Start
+              </>
+            )}
+          </button>
+        </div>
+      </motion.div>
+
+      <div className="border-t border-cream/10 my-4"></div>
 
       <motion.div variants={itemVariants} initial="hidden" animate="visible"
         className="bg-surface pl-0 pr-0 py-0"
