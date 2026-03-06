@@ -6,10 +6,11 @@ import Dashboard from '@/components/pages/Dashboard'
 import Contracts from '@/components/pages/Contracts'
 import TimeTracking from '@/components/pages/TimeTracking'
 import Settings from '@/components/pages/Settings'
+import Jobs from '@/components/pages/Jobs'
 import Navigation from '@/components/Navigation'
 import CreateContractPanel from '@/components/CreateContractPanel'
 
-const pages = ['dashboard', 'contracts', 'time', 'settings'] as const
+const pages = ['dashboard', 'contracts', 'jobs', 'time', 'settings'] as const
 type PageType = typeof pages[number]
 
 export default function Home() {
@@ -169,6 +170,15 @@ export default function Home() {
           animate={{ scaleX: 1, originX: 0 }}
           transition={{ duration: 0.3 }}
         />
+        {isTimerRunning && (
+          <motion.div
+            className="fixed top-8 left-8 z-30"
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <p className="font-mono text-sm text-mint">Timer Running...</p>
+          </motion.div>
+        )}
         <motion.div
           key={currentPage}
           initial={{ opacity: 0 }}
@@ -181,6 +191,7 @@ export default function Home() {
             if (p === 'contracts') setShowCreateContract(true)
             else setCurrentPage(p as PageType)
           }} contracts={contracts} onDeleteContract={handleDeleteContract} onTrackTime={handleTrackTime} />}
+          {currentPage === 'jobs' && <Jobs />}
           {currentPage === 'time' && <TimeTracking contracts={contracts} selectedContractId={selectedContractId} onSelectContract={setSelectedContractId} isRunning={isTimerRunning} time={timerSeconds} onStart={handleStartTimer} onStop={handleStopTimer} onSaveEntry={handleSaveTimeEntry} entries={entries} />}
           {currentPage === 'settings' && <Settings onClearEntries={() => { setTotalTime('0h 0m'); setTimerSeconds(0); timerRef.current = 0 }} />}
         </motion.div>

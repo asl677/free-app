@@ -7,17 +7,19 @@ import {
   FileTextIcon,
   TimerIcon,
   GearIcon,
+  BriefcaseIcon,
 } from '@radix-ui/react-icons'
 
 interface NavigationProps {
-  currentPage: 'dashboard' | 'contracts' | 'time' | 'settings'
-  onNavigate: (page: 'dashboard' | 'contracts' | 'time' | 'settings') => void
+  currentPage: 'dashboard' | 'contracts' | 'time' | 'settings' | 'jobs'
+  onNavigate: (page: 'dashboard' | 'contracts' | 'time' | 'settings' | 'jobs') => void
 }
 
 export default function Navigation({ currentPage, onNavigate }: NavigationProps) {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', Icon: HomeIcon },
     { id: 'contracts', label: 'Contracts', Icon: FileTextIcon },
+    { id: 'jobs', label: 'Jobs', Icon: BriefcaseIcon },
     { id: 'time', label: 'Time', Icon: TimerIcon },
     { id: 'settings', label: 'Settings', Icon: GearIcon },
   ] as const
