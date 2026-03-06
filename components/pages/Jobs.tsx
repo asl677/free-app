@@ -204,7 +204,6 @@ export default function Jobs() {
                     <p className="text-3xl md:text-6xl text-mint font-sans font-medium text-right whitespace-nowrap">{job.salary}</p>
                   </div>
                 </div>
-                <p className="text-cream/50 font-mono text-xs">via {job.board}</p>
               </motion.a>
             ))}
           </motion.div>
