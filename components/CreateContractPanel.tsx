@@ -37,7 +37,7 @@ export default function CreateContractPanel({
       initial={{ width: 0 }}
       animate={{ width: isOpen ? 384 : 0 }}
       exit={{ width: 0 }}
-      transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
       className="fixed md:relative right-0 top-0 w-96 bg-white border-l border-black flex flex-col h-screen overflow-hidden z-50 md:z-auto"
     >
       {/* Header */}
