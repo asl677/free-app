@@ -195,14 +195,13 @@ export default function Jobs() {
                 rel="noopener noreferrer"
                 className="bg-surface pl-0 pr-6 py-6 border-t border-border transition-colors cursor-pointer hover:bg-surface/80 flex flex-col"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
+                <div className="flex items-start justify-between mb-4 gap-4">
+                  <div className="flex-1">
                     <h3 className="text-xl font-light mb-1">{job.title}</h3>
-                    <p className="text-cream/60 font-mono text-sm">{job.type} • {job.duration}</p>
+                    <p className="text-cream/60 font-mono text-sm">{job.type} • {job.company} • {job.duration} • {job.location}</p>
                   </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <p className="text-3xl md:text-6xl text-mint font-sans font-medium">{job.salary}</p>
-                    <p className="text-cream/60 font-mono text-xs">{job.location}</p>
+                  <div className="flex-shrink-0">
+                    <p className="text-3xl md:text-6xl text-mint font-sans font-medium text-right whitespace-nowrap">{job.salary}</p>
                   </div>
                 </div>
                 <p className="text-cream/50 font-mono text-xs">via {job.board}</p>
