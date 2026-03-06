@@ -121,11 +121,11 @@ export default function Jobs({}: JobsProps) {
       <div className="px-4 md:px-8 py-4">
         {showSearch && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="bg-transparent mb-4 space-y-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="bg-transparent mb-2 space-y-4"
           >
             <input
               type="text"
@@ -182,12 +182,12 @@ export default function Jobs({}: JobsProps) {
           </motion.div>
         )}
 
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" className="space-y-4">
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" className="space-y-0">
           {filtered.map((job) => (
             <motion.div
               key={job.id}
               variants={itemVariants}
-              className="bg-surface pl-0 pr-6 py-6 transition-colors cursor-pointer"
+              className="bg-surface pl-0 pr-6 py-6 border-t border-border transition-colors cursor-pointer"
               onClick={() => console.log('Job clicked:', job.id)}
             >
               <div className="flex items-start justify-between mb-4">
