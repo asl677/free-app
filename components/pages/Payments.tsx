@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import gsap from 'gsap'
+import { ArrowUpIcon, ArrowDownIcon, PlusIcon } from '@radix-ui/react-icons'
 
 interface PaymentsProps {
   onNavigate: (page: any) => void
@@ -28,40 +29,40 @@ export default function Payments(_: PaymentsProps) {
         <p className="text-5xl font-mono text-mint mb-8">$3,240.50</p>
         <div className="grid grid-cols-2 gap-4">
           <button className="bg-coral text-dark px-6 py-3 rounded-lg font-mono text-sm flex items-center justify-center gap-2 hover:bg-coral/90">
-            ⬆ Deposit
+            <ArrowUpIcon width={16} height={16} />
+            Deposit
           </button>
           <button className="bg-mint text-dark px-6 py-3 rounded-lg font-mono text-sm flex items-center justify-center gap-2 hover:bg-mint/90">
-            ⬇ Withdraw
+            <ArrowDownIcon width={16} height={16} />
+            Withdraw
           </button>
         </div>
       </div>
 
       <div className="payment-item bg-surface rounded-lg p-6 border border-border mb-8">
-        <h2 className="text-xl font-light mb-6 flex items-center gap-2">
-          💳 Deposit Methods
-        </h2>
+        <h2 className="text-xl font-light mb-6">Deposit Methods</h2>
         <div className="space-y-3">
           <div className="p-4 bg-dark rounded-lg border border-border flex items-center justify-between">
             <p className="font-light">Visa ending in 4242</p>
             <span className="text-cream/50 font-mono text-xs">Primary</span>
           </div>
-          <button className="w-full p-4 bg-dark rounded-lg border border-border hover:border-coral/50 transition-colors text-coral font-mono text-sm">
-            + Add Card
+          <button className="w-full p-4 bg-dark rounded-lg border border-border hover:border-coral/50 transition-colors text-coral font-mono text-sm flex items-center justify-center gap-2">
+            <PlusIcon width={16} height={16} />
+            Add Card
           </button>
         </div>
       </div>
 
       <div className="payment-item bg-surface rounded-lg p-6 border border-border">
-        <h2 className="text-xl font-light mb-6 flex items-center gap-2">
-          🏦 Bank Accounts
-        </h2>
+        <h2 className="text-xl font-light mb-6">Bank Accounts</h2>
         <div className="space-y-3">
           <div className="p-4 bg-dark rounded-lg border border-border flex items-center justify-between">
             <p className="font-light">Chase Checking ••••2419</p>
             <span className="text-mint font-mono text-xs">Verified</span>
           </div>
-          <button className="w-full p-4 bg-dark rounded-lg border border-border hover:border-coral/50 transition-colors text-coral font-mono text-sm">
-            + Link Account
+          <button className="w-full p-4 bg-dark rounded-lg border border-border hover:border-coral/50 transition-colors text-coral font-mono text-sm flex items-center justify-center gap-2">
+            <PlusIcon width={16} height={16} />
+            Link Account
           </button>
         </div>
       </div>

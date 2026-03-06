@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import gsap from 'gsap'
+import { PlayIcon, StopIcon } from '@radix-ui/react-icons'
 
 interface TimeTrackingProps {
   onNavigate: (page: any) => void
@@ -54,7 +55,17 @@ export default function TimeTracking(_: TimeTrackingProps) {
                 : 'bg-mint text-dark hover:bg-mint/90'
             }`}
           >
-            {isRunning ? '⏹ Stop' : '▶ Start'}
+            {isRunning ? (
+              <>
+                <StopIcon width={20} height={20} />
+                Stop
+              </>
+            ) : (
+              <>
+                <PlayIcon width={20} height={20} />
+                Start
+              </>
+            )}
           </button>
         </div>
       </div>

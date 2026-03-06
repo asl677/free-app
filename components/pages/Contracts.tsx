@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import gsap from 'gsap'
+import { CheckIcon, ClockIcon } from '@radix-ui/react-icons'
 
 interface ContractsProps {
   onNavigate: (page: any) => void
@@ -47,9 +48,15 @@ export default function Contracts({ onNavigate }: ContractsProps) {
               </div>
               <div className="flex items-center gap-2">
                 {contract.status === 'active' ? (
-                  <span className="text-mint font-mono text-xs">✓ Active</span>
+                  <div className="flex items-center gap-1 text-mint">
+                    <CheckIcon width={16} height={16} />
+                    <span className="font-mono text-xs">Active</span>
+                  </div>
                 ) : (
-                  <span className="text-coral font-mono text-xs">⏱ Pending</span>
+                  <div className="flex items-center gap-1 text-coral">
+                    <ClockIcon width={16} height={16} />
+                    <span className="font-mono text-xs">Pending</span>
+                  </div>
                 )}
               </div>
             </div>

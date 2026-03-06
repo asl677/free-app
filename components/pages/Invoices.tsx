@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import gsap from 'gsap'
+import { UploadIcon, CheckIcon } from '@radix-ui/react-icons'
 
 interface InvoicesProps {
   onNavigate: (page: any) => void
@@ -30,7 +31,8 @@ export default function Invoices(_: InvoicesProps) {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-4xl font-light">Invoices</h1>
         <button className="bg-coral text-dark px-6 py-3 rounded-lg font-mono text-sm flex items-center gap-2 hover:bg-coral/90">
-          📤 Generate
+          <UploadIcon width={16} height={16} />
+          Generate
         </button>
       </div>
 
@@ -49,7 +51,7 @@ export default function Invoices(_: InvoicesProps) {
               <div className="text-right">
                 <p className="text-2xl font-mono text-mint mb-2">{invoice.amount}</p>
                 <span
-                  className={`inline-block font-mono text-xs px-3 py-1 rounded ${
+                  className={`inline-flex items-center gap-1 font-mono text-xs px-3 py-1 rounded ${
                     invoice.status === 'paid'
                       ? 'bg-mint/20 text-mint'
                       : invoice.status === 'pending'
@@ -57,7 +59,8 @@ export default function Invoices(_: InvoicesProps) {
                       : 'bg-border text-cream/60'
                   }`}
                 >
-                  {invoice.status === 'paid' ? '✓ ' : ''}{invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+                  {invoice.status === 'paid' && <CheckIcon width={12} height={12} />}
+                  {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
                 </span>
               </div>
             </div>
