@@ -102,8 +102,8 @@ export default function Jobs() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             {lastUpdated && (
-              <p className="text-cream/50 font-mono text-xs">
-                Updated {getRelativeTime(lastUpdated)}
+              <p className="text-cream/50 font-mono text-xs uppercase">
+                {getRelativeTime(lastUpdated)}
               </p>
             )}
             <button
