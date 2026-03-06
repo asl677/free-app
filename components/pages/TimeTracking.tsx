@@ -73,7 +73,7 @@ export default function TimeTracking({ contracts = [], selectedContractId = null
       <div className="px-4 md:px-8 py-4">
 
       <motion.div className="mb-4">
-        <div className="text-4xl md:text-7xl text-mint font-sans font-medium tracking-tight">
+        <div className="text-7xl text-mint font-sans font-medium tracking-tight">
           {String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
         </div>
       </motion.div>
