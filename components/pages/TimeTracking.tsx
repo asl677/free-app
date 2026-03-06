@@ -94,7 +94,7 @@ export default function TimeTracking({ contracts = [], selectedContractId = null
       <motion.div variants={itemVariants} initial="hidden" animate="visible"
         className="bg-surface p-4 mb-4 text-center"
       >
-        <div className="text-5xl font-mono text-mint mb-4 tracking-tight">
+        <div className="text-7xl text-mint mb-4 tracking-tight" style={{ fontFamily: 'EB Garamond, serif', fontWeight: 500 }}>
           {String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
         </div>
         <div className="flex justify-center gap-4">

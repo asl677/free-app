@@ -59,12 +59,12 @@ export default function Contracts({ onNavigate, contracts = [], onDeleteContract
           </motion.div>
         </motion.div>
       ) : (
-        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-4">
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-0">
           {contracts.map((contract) => (
             <motion.div
               key={contract.id}
               variants={itemVariants}
-              className="bg-surface pl-0 pr-6 py-6 transition-colors cursor-pointer"
+              className="bg-surface pl-0 pr-6 py-6 border-t border-border transition-colors cursor-pointer"
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -72,36 +72,36 @@ export default function Contracts({ onNavigate, contracts = [], onDeleteContract
                   <p className="text-cream/60 font-mono text-sm">{contract.rate}</p>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  <div className="flex items-center gap-2">
-                    {contract.status === 'active' ? (
-                      <div className="flex items-center gap-1 text-mint">
-                        <CheckIcon width={16} height={16} />
-                        <span className="font-mono text-xs">Active</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1 text-coral">
-                        <ClockIcon width={16} height={16} />
-                        <span className="font-mono text-xs">Pending</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => onTrackTime?.(contract.id)}
-                      className="text-mint hover:text-mint/80 font-mono text-xs transition-colors"
-                    >
-                      Track
-                    </button>
-                    <button
-                      onClick={() => onDeleteContract?.(contract.id)}
-                      className="text-coral hover:text-coral/80 font-mono text-xs transition-colors"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  {contract.status === 'active' ? (
+                    <div className="flex items-center gap-1 text-mint">
+                      <CheckIcon width={16} height={16} />
+                      <span className="font-mono text-xs">Active</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1 text-coral">
+                      <ClockIcon width={16} height={16} />
+                      <span className="font-mono text-xs">Pending</span>
+                    </div>
+                  )}
                 </div>
               </div>
-              <p className="text-cream/50 font-mono text-xs">Started {contract.startDate}</p>
+              <div className="flex items-center justify-between">
+                <p className="text-cream/50 font-mono text-xs">Started {contract.startDate}</p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => onTrackTime?.(contract.id)}
+                    className="text-mint hover:text-mint/80 font-mono text-xs transition-colors"
+                  >
+                    Track
+                  </button>
+                  <button
+                    onClick={() => onDeleteContract?.(contract.id)}
+                    className="text-coral hover:text-coral/80 font-mono text-xs transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
             </motion.div>
           ))}
         </motion.div>
