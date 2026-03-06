@@ -7,6 +7,7 @@ import Contracts from '@/components/pages/Contracts'
 import TimeTracking from '@/components/pages/TimeTracking'
 import Settings from '@/components/pages/Settings'
 import Jobs from '@/components/pages/Jobs'
+import JobDetail from '@/components/pages/JobDetail'
 import Navigation from '@/components/Navigation'
 import CreateContractPanel from '@/components/CreateContractPanel'
 
@@ -15,6 +16,7 @@ type PageType = typeof pages[number]
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState<PageType>('dashboard')
+  const [selectedJobId, setSelectedJobId] = useState<number | null>(null)
   const [showCreateContract, setShowCreateContract] = useState(false)
   const [selectedContractId, setSelectedContractId] = useState<number | null>(null)
   const [totalTime, setTotalTime] = useState('0h 0m')
@@ -191,7 +193,20 @@ export default function Home() {
             if (p === 'contracts') setShowCreateContract(true)
             else setCurrentPage(p as PageType)
           }} contracts={contracts} onDeleteContract={handleDeleteContract} onTrackTime={handleTrackTime} />}
-          {currentPage === 'jobs' && <Jobs />}
+          {currentPage === 'jobs' && <Jobs onNavigate={(page, jobId) => {
+            if (page === 'job-detail' && jobId) {
+              setSelectedJobId(jobId)
+              setCurrentPage('jobs' as PageType)
+            } else {
+              setCurrentPage(page as PageType)
+            }
+          }} />}
+          {selectedJobId && currentPage === 'jobs' && <JobDetail jobId={selectedJobId} onNavigate={(page) => {
+            setSelectedJobId(null)
+            if (page !== 'jobs') {
+              setCurrentPage(page as PageType)
+            }
+          }} />}
           {currentPage === 'time' && <TimeTracking contracts={contracts} selectedContractId={selectedContractId} onSelectContract={setSelectedContractId} isRunning={isTimerRunning} time={timerSeconds} onStart={handleStartTimer} onStop={handleStopTimer} onSaveEntry={handleSaveTimeEntry} entries={entries} />}
           {currentPage === 'settings' && <Settings onClearEntries={() => { setTotalTime('0h 0m'); setTimerSeconds(0); timerRef.current = 0 }} />}
         </motion.div>

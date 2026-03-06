@@ -59,7 +59,7 @@ export default function Dashboard({ onNavigate, totalTimeThisWeek = '0h', contra
               className="bg-surface pt-6 pr-6 pb-6"
             >
               <h2 className="text-2xl font-light mb-4">{item.title}</h2>
-              <p className="text-6xl text-mint mb-4" style={{ fontFamily: 'EB Garamond, serif', fontWeight: 500 }}>{item.value}</p>
+              <p className="text-6xl text-mint mb-4 font-sans font-medium">{item.value}</p>
               <button
                 onClick={() => onNavigate(item.id)}
                 className="flex items-center gap-2 text-coral hover:text-coral/80 font-mono text-sm"

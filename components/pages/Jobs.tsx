@@ -52,9 +52,11 @@ const generateMockJobs = (count: number) => {
 
 const allJobs = generateMockJobs(500)
 
-interface JobsProps {}
+interface JobsProps {
+  onNavigate?: (page: string, jobId?: number) => void
+}
 
-export default function Jobs({}: JobsProps) {
+export default function Jobs({ onNavigate }: JobsProps) {
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('All')
   const [salaryFilter, setSalaryFilter] = useState('All')
@@ -187,8 +189,8 @@ export default function Jobs({}: JobsProps) {
             <motion.div
               key={job.id}
               variants={itemVariants}
-              className="bg-surface pl-0 pr-6 py-6 border-t border-border transition-colors cursor-pointer"
-              onClick={() => console.log('Job clicked:', job.id)}
+              className="bg-surface pl-0 pr-6 py-6 border-t border-border transition-colors cursor-pointer hover:bg-surface/80"
+              onClick={() => onNavigate?.('job-detail', job.id)}
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
