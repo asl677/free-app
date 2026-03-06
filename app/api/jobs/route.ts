@@ -91,15 +91,12 @@ const realJobs = [
 ]
 
 export async function GET() {
-  // Shuffle jobs for variety
-  const shuffled = [...realJobs].sort(() => Math.random() - 0.5)
-
-  const jobs = shuffled.slice(0, 50).map((job, idx) => ({
+  const jobs = realJobs.map((job, idx) => ({
     id: idx + 1,
     title: job.title,
     company: job.company,
     type: getJobType(job.title),
-    salary: `${formatSalary(job.min)}-${formatSalary(job.max)}`,
+    salary: formatSalary(job.min),
     location: job.location,
     duration: job.duration,
     url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(job.title)}&location=${encodeURIComponent(job.location)}`,
