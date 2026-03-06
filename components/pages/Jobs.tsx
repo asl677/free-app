@@ -141,7 +141,7 @@ export default function Jobs() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
-              style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
+              style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -151,7 +151,7 @@ export default function Jobs() {
                   value={typeFilter}
                   onChange={(e) => setTypeFilter(e.target.value)}
                   className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
-                  style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
+                  style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
                 >
                   {types.map(t => (
                     <option key={t} value={t}>{t}</option>
@@ -165,7 +165,7 @@ export default function Jobs() {
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
                   className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
-                  style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
+                  style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
                 >
                   {locations.map(l => (
                     <option key={l} value={l}>{l}</option>
