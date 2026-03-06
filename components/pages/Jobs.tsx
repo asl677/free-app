@@ -111,18 +111,20 @@ export default function Jobs({}: JobsProps) {
 
       <div className="px-4 md:px-8 py-4">
         <motion.div variants={itemVariants} initial="hidden" animate="visible"
-          className="bg-transparent pl-4 pr-4 py-6 mb-4 space-y-6"
+          className="bg-transparent py-6 mb-4 space-y-6"
         >
-          <input
-            type="text"
-            placeholder="Search jobs..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
-            style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
-          />
+          <div className="px-4 md:px-8">
+            <input
+              type="text"
+              placeholder="Search jobs..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
+              style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
+            />
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 md:px-8">
             <div>
               <label className="block text-sm font-medium text-dark mb-2">TYPE</label>
               <select
