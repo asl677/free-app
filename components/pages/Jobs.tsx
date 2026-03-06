@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 
 const itemVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -59,6 +60,7 @@ export default function Jobs({}: JobsProps) {
   const [salaryFilter, setSalaryFilter] = useState('All')
   const [locationFilter, setLocationFilter] = useState('All')
   const [displayedJobs, setDisplayedJobs] = useState(allJobs.slice(0, 50))
+  const [showSearch, setShowSearch] = useState(false)
   const loaderRef = useRef<HTMLDivElement>(null)
 
   const types = ['All', 'Product', 'Design']
@@ -103,17 +105,30 @@ export default function Jobs({}: JobsProps) {
 
   return (
     <div className="w-full">
-      <motion.h1 variants={itemVariants} initial="hidden" animate="visible"
-        className="sticky top-0 bg-dark z-40 px-4 md:px-8 py-8 text-4xl font-light"
-      >
-        Jobs
-      </motion.h1>
-
-      <div className="px-4 md:px-8 py-4">
-        <motion.div variants={itemVariants} initial="hidden" animate="visible"
-          className="bg-transparent py-6 mb-4 space-y-6"
+      <div className="sticky top-0 bg-dark z-40 px-4 md:px-8 py-8 flex items-center justify-between">
+        <motion.h1 variants={itemVariants} initial="hidden" animate="visible"
+          className="text-4xl font-light"
         >
-          <div className="px-4 md:px-8">
+          Jobs
+        </motion.h1>
+        <button
+          onClick={() => setShowSearch(!showSearch)}
+          className="text-cream hover:text-coral transition-colors"
+          aria-label="Toggle search"
+        >
+          <MagnifyingGlassIcon width={24} height={24} />
+        </button>
+      </div>
+
+      <div className="py-4">
+        {showSearch && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="bg-transparent py-6 mb-4 space-y-6 px-4 md:px-8"
+          >
             <input
               type="text"
               placeholder="Search jobs..."
@@ -122,52 +137,52 @@ export default function Jobs({}: JobsProps) {
               className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
               style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
             />
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 md:px-8">
-            <div>
-              <label className="block text-sm font-medium text-dark mb-2">TYPE</label>
-              <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
-                style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
-              >
-                {types.map(t => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-dark mb-2">TYPE</label>
+                <select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
+                  style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
+                >
+                  {types.map(t => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-dark mb-2">SALARY</label>
-              <select
-                value={salaryFilter}
-                onChange={(e) => setSalaryFilter(e.target.value)}
-                className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
-                style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
-              >
-                {salaries.map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-dark mb-2">SALARY</label>
+                <select
+                  value={salaryFilter}
+                  onChange={(e) => setSalaryFilter(e.target.value)}
+                  className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
+                  style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
+                >
+                  {salaries.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-dark mb-2">LOCATION</label>
-              <select
-                value={locationFilter}
-                onChange={(e) => setLocationFilter(e.target.value)}
-                className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
-                style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
-              >
-                {locations.map(l => (
-                  <option key={l} value={l}>{l}</option>
-                ))}
-              </select>
+              <div>
+                <label className="block text-sm font-medium text-dark mb-2">LOCATION</label>
+                <select
+                  value={locationFilter}
+                  onChange={(e) => setLocationFilter(e.target.value)}
+                  className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
+                  style={{ backgroundColor: 'white', color: 'black', borderRadius: 0 }}
+                >
+                  {locations.map(l => (
+                    <option key={l} value={l}>{l}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
 
         <motion.div variants={itemVariants} initial="hidden" animate="visible" className="space-y-4">
           {filtered.map((job) => (
