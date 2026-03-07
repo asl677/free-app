@@ -224,7 +224,7 @@ export default function Jobs() {
               style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
             />
 
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-2 gap-2.5 pb-6">
               <div>
                 <label className="block text-sm font-medium text-dark mb-2">TYPE</label>
                 <select
