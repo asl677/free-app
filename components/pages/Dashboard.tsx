@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 
 interface DashboardProps {
   onNavigate: (page: any) => void
-  totalTimeThisWeek?: string
   contracts?: any[]
   entries?: any[]
 }
@@ -29,7 +28,7 @@ const itemVariants = {
   },
 }
 
-export default function Dashboard({ onNavigate, totalTimeThisWeek = '0h', contracts = [], entries = [] }: DashboardProps) {
+export default function Dashboard({ onNavigate, contracts = [], entries = [] }: DashboardProps) {
   // Calculate total earnings all time
   const totalEarningsAllTime = entries.reduce((sum, entry) => {
     const amount = parseFloat(entry.earnings?.replace('$', '') || '0')

@@ -222,7 +222,7 @@ function HomeContent() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
         >
-          {currentPage === 'dashboard' && <Dashboard onNavigate={setCurrentPage} totalTimeThisWeek={totalTime} contracts={contracts} entries={entries} />}
+          {currentPage === 'dashboard' && <Dashboard onNavigate={setCurrentPage} contracts={contracts} entries={entries} />}
           {currentPage === 'contracts' && <Contracts onNavigate={(p) => {
             if (p === 'contracts') setShowCreateContract(true)
             else setCurrentPage(p as PageType)
