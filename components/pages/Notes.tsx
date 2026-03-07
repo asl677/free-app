@@ -51,33 +51,9 @@ export default function Notes() {
     localStorage.setItem('notes', JSON.stringify(notes))
   }, [notes])
 
-  // Handle keyboard input
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      // Create new line with current font weight
-      const newNote: Note = {
-        id: Date.now().toString(),
-        text: '',
-        isBold: fontWeight === 'bold',
-        indent: 0,
-      }
-      setNotes([...notes, newNote])
-    } else if (e.key === 'Backspace') {
-      // Allow backspace to delete content within current note
-      if (canvasRef.current?.innerText === '') {
-        e.preventDefault()
-        // Delete empty note and go back to previous
-        if (notes.length > 1) {
-          setNotes(notes.slice(0, -1))
-        }
-      }
-    }
-  }
-
   const handleInput = (text: string) => {
-    const newNotes = [...notes]
-    if (newNotes.length === 0) {
+    // Simple note storage - just one note
+    if (notes.length === 0 && text) {
       const newNote: Note = {
         id: Date.now().toString(),
         text,
@@ -85,10 +61,11 @@ export default function Notes() {
         indent: 0,
       }
       setNotes([newNote])
-    } else {
-      newNotes[newNotes.length - 1].text = text
-      newNotes[newNotes.length - 1].isBold = fontWeight === 'bold'
-      setNotes(newNotes)
+    } else if (notes.length > 0) {
+      const updatedNotes = [...notes]
+      updatedNotes[0].text = text
+      updatedNotes[0].isBold = fontWeight === 'bold'
+      setNotes(updatedNotes)
     }
   }
 
@@ -126,97 +103,47 @@ export default function Notes() {
         </h1>
       </motion.div>
 
-      {/* Font Weight Selection */}
-      <motion.div variants={itemVariants} className="flex gap-4 mb-8">
-        <button
-          onClick={() => setFontWeight('regular')}
-          className={`text-sm transition-colors ${
-            fontWeight === 'regular'
-              ? 'text-coral'
-              : 'text-cream/60 hover:text-cream'
-          }`}
-        >
-          Regular
-        </button>
-        <button
-          onClick={() => setFontWeight('bold')}
-          className={`text-sm transition-colors ${
-            fontWeight === 'bold'
-              ? 'text-coral'
-              : 'text-cream/60 hover:text-cream'
-          }`}
-        >
-          Bold
-        </button>
-      </motion.div>
 
       {/* Canvas Area */}
       <motion.div variants={itemVariants} className="flex-1 relative">
         <div className="w-full h-full bg-dark relative overflow-auto">
-          {/* Notes Container */}
-          <div className="space-y-1">
-            {notes.length === 0 ? (
-              <div className="text-cream/40 italic">Start typing...</div>
-            ) : (
-              notes.map((note, idx) => (
-                <div
-                  key={note.id}
-                  className={`leading-relaxed break-words ${
-                    note.isBold ? 'font-bold' : 'font-normal'
-                  }`}
-                  style={{ color: '#000000' }}
-                >
-                  • {note.text}
-                </div>
-              ))
-            )}
+          {/* Active Input Line */}
+          <div className="relative">
+            {/* Hidden text measurement */}
+            <div
+              ref={measureRef}
+              className="invisible inline-block"
+              style={{
+                color: '#000000',
+                whiteSpace: 'pre-wrap',
+              }}
+            />
 
-            {/* Active Input Line */}
-            <div className="relative flex items-start">
-              <span style={{ color: '#000000' }}>• </span>
-              <div className="relative flex-1">
-                {/* Hidden text measurement */}
-                <div
-                  ref={measureRef}
-                  className={`invisible inline-block ${
-                    fontWeight === 'bold' ? 'font-bold' : 'font-normal'
-                  }`}
-                  style={{
-                    color: '#000000',
-                    whiteSpace: 'pre-wrap',
-                  }}
-                />
+            {/* Editable Input */}
+            <div
+              ref={canvasRef}
+              contentEditable
+              suppressContentEditableWarning
+              onInput={(e) => {
+                const text = e.currentTarget.innerText
+                handleInput(text)
+              }}
+              className="outline-none leading-relaxed min-h-6 break-words"
+              style={{
+                color: '#000000',
+                caretColor: 'transparent',
+              }}
+            />
 
-                {/* Editable Input */}
-                <div
-                  ref={canvasRef}
-                  contentEditable
-                  suppressContentEditableWarning
-                  onKeyDown={handleKeyDown}
-                  onInput={(e) => {
-                    const text = e.currentTarget.innerText
-                    handleInput(text)
-                  }}
-                  className={`outline-none leading-relaxed min-h-6 break-words ${
-                    fontWeight === 'bold' ? 'font-bold' : 'font-normal'
-                  }`}
-                  style={{
-                    color: '#000000',
-                    caretColor: 'transparent',
-                  }}
-                />
-
-                {/* Custom Black Cursor */}
-                <div
-                  ref={cursorRef}
-                  className="absolute top-0 w-0.5 h-6 bg-black pointer-events-none"
-                  style={{
-                    animation: 'blink 1s infinite',
-                    left: `${cursorLeft}px`,
-                  }}
-                />
-              </div>
-            </div>
+            {/* Custom Black Cursor */}
+            <div
+              ref={cursorRef}
+              className="absolute top-0 w-0.5 h-6 bg-black pointer-events-none"
+              style={{
+                animation: 'blink 1s infinite',
+                left: `${cursorLeft}px`,
+              }}
+            />
           </div>
         </div>
 
