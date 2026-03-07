@@ -35,7 +35,8 @@ export default function Notes() {
   const [fontWeight, setFontWeight] = useState<'regular' | 'bold'>('regular')
   const canvasRef = useRef<HTMLDivElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
-  const [cursorPosition, setCursorPosition] = useState(0)
+  const measureRef = useRef<HTMLDivElement>(null)
+  const [cursorLeft, setCursorLeft] = useState(0)
 
   // Load notes from localStorage on mount
   useEffect(() => {
@@ -91,16 +92,24 @@ export default function Notes() {
     }
   }
 
+  // Update cursor position based on text content
+  useEffect(() => {
+    if (canvasRef.current && measureRef.current) {
+      const text = canvasRef.current.innerText.replace(/^• /, '')
+      measureRef.current.innerText = text
+      const width = measureRef.current.offsetWidth
+      setCursorLeft(width)
+    }
+  }, [notes])
+
   // Create a cursor animation
   useEffect(() => {
-    if (canvasRef.current) {
-      const blink = setInterval(() => {
-        if (cursorRef.current) {
-          cursorRef.current.style.opacity = cursorRef.current.style.opacity === '0' ? '1' : '0'
-        }
-      }, 530)
-      return () => clearInterval(blink)
-    }
+    const blink = setInterval(() => {
+      if (cursorRef.current) {
+        cursorRef.current.style.opacity = cursorRef.current.style.opacity === '0' ? '1' : '0'
+      }
+    }, 530)
+    return () => clearInterval(blink)
   }, [])
 
   return (
@@ -163,36 +172,50 @@ export default function Notes() {
             )}
 
             {/* Active Input Line */}
-            <div className="relative">
+            <div className="relative flex items-start">
               <span style={{ color: '#000000' }}>• </span>
-              <div
-                ref={canvasRef}
-                contentEditable
-                suppressContentEditableWarning
-                onKeyDown={handleKeyDown}
-                onInput={(e) => {
-                  const text = e.currentTarget.innerText.replace(/^• /, '')
-                  handleInput(text)
-                }}
-                className={`outline-none leading-relaxed min-h-6 break-words inline-block ${
-                  fontWeight === 'bold' ? 'font-bold' : 'font-normal'
-                }`}
-                style={{
-                  color: '#000000',
-                  caretColor: 'transparent',
-                  display: 'inline',
-                  width: 'auto',
-                }}
-              />
+              <div className="relative flex-1">
+                {/* Hidden text measurement */}
+                <div
+                  ref={measureRef}
+                  className={`invisible inline-block ${
+                    fontWeight === 'bold' ? 'font-bold' : 'font-normal'
+                  }`}
+                  style={{
+                    color: '#000000',
+                    whiteSpace: 'pre-wrap',
+                  }}
+                />
 
-              {/* Custom Black Cursor */}
-              <div
-                ref={cursorRef}
-                className="absolute w-0.5 h-6 bg-black pointer-events-none"
-                style={{
-                  animation: 'blink 1s infinite',
-                }}
-              />
+                {/* Editable Input */}
+                <div
+                  ref={canvasRef}
+                  contentEditable
+                  suppressContentEditableWarning
+                  onKeyDown={handleKeyDown}
+                  onInput={(e) => {
+                    const text = e.currentTarget.innerText
+                    handleInput(text)
+                  }}
+                  className={`outline-none leading-relaxed min-h-6 break-words ${
+                    fontWeight === 'bold' ? 'font-bold' : 'font-normal'
+                  }`}
+                  style={{
+                    color: '#000000',
+                    caretColor: 'transparent',
+                  }}
+                />
+
+                {/* Custom Black Cursor */}
+                <div
+                  ref={cursorRef}
+                  className="absolute top-0 w-0.5 h-6 bg-black pointer-events-none"
+                  style={{
+                    animation: 'blink 1s infinite',
+                    left: `${cursorLeft}px`,
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -209,10 +232,6 @@ export default function Notes() {
         `}</style>
       </motion.div>
 
-      {/* Footer Info */}
-      <motion.div variants={itemVariants} className="mt-8 text-cream/50 text-sm">
-        <p>Enter for new bullet</p>
-      </motion.div>
     </motion.div>
   )
 }
