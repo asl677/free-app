@@ -231,7 +231,7 @@ export default function Jobs() {
                 style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
               >
                 {types.map(t => (
-                  <option key={t} value={t}>{t}</option>
+                  <option key={t} value={t}>{t === 'All' ? 'All Types' : t}</option>
                 ))}
               </select>
               <select
@@ -241,7 +241,7 @@ export default function Jobs() {
                 style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
               >
                 {locations.map(l => (
-                  <option key={l} value={l}>{l}</option>
+                  <option key={l} value={l}>{l === 'All' ? 'All Locations' : l}</option>
                 ))}
               </select>
             </div>
@@ -263,7 +263,7 @@ export default function Jobs() {
                   style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
                 >
                   {types.map(t => (
-                    <option key={t} value={t}>{t}</option>
+                    <option key={t} value={t}>{t === 'All' ? 'All Types' : t}</option>
                   ))}
                 </select>
                 <select
@@ -273,7 +273,7 @@ export default function Jobs() {
                   style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
                 >
                   {locations.map(l => (
-                    <option key={l} value={l}>{l}</option>
+                    <option key={l} value={l}>{l === 'All' ? 'All Locations' : l}</option>
                   ))}
                 </select>
               </div>
