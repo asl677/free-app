@@ -237,10 +237,12 @@ export default function Jobs() {
           <p className="text-cream/50 font-mono text-sm">Grabbin' jobs</p>
         </div>
       ) : (
-        <div ref={mainRef} className={`px-4 md:px-8 py-4 pb-12 overflow-y-auto ${showSearch ? 'pt-56' : 'pt-24'}`}>
-          {showSearch && (
-          <div
-            className="fixed top-24 left-0 right-0 md:left-20 z-30 bg-dark"
+        <>
+          <motion.div
+            className="fixed top-24 left-0 right-0 md:left-20 z-30 bg-dark overflow-hidden"
+            initial={{ maxHeight: 0 }}
+            animate={{ maxHeight: showSearch ? 300 : 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             <div className="hidden md:grid grid-cols-4 gap-2.5 px-4 md:px-8 py-4">
               <input
@@ -301,8 +303,14 @@ export default function Jobs() {
                 displayFormat={(v) => v === 'All' ? 'All Sources' : v}
               />
             </div>
-          </div>
-        )}
+          </motion.div>
+
+          <motion.div
+            ref={mainRef}
+            className="px-4 md:px-8 py-4 pb-12 overflow-y-auto"
+            animate={{ paddingTop: showSearch ? 224 : 96 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
 
           <motion.div
             key={`${typeFilter}-${locationFilter}-${search}-${sourceFilter}`}
@@ -379,7 +387,8 @@ export default function Jobs() {
             <div className="text-cream/50 font-mono text-sm">No more jobs</div>
           </div>
         )}
-      </div>
+          </motion.div>
+        </>
       )}
     </div>
   )
