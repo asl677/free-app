@@ -132,6 +132,9 @@ export default function Notes() {
               style={{
                 color: '#000000',
                 caretColor: 'transparent',
+                userSelect: 'text',
+                WebkitUserSelect: 'text',
+                cursor: 'text',
               }}
             />
 

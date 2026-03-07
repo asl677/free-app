@@ -98,7 +98,7 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
               buttonRefs.current[idx] = el
             }}
             onClick={() => onNavigate(id as any)}
-            className={`flex flex-col items-center gap-1 p-3 transition-all duration-200 relative z-10 rounded ${
+            className={`flex items-center justify-center transition-all duration-200 relative z-10 rounded ${
               currentPage === id
                 ? 'bg-coral text-dark'
                 : 'text-cream hover:bg-white/20'
@@ -107,7 +107,7 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
             aria-label={label}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: idx * 0.08 }}
+            transition={{ duration: 1, delay: idx * 0.05 }}
           >
             <Icon width={24} height={24} />
           </motion.button>
