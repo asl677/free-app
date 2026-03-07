@@ -4,9 +4,9 @@ import { motion } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import {
   LayersIcon,
-  FileTextIcon,
   TimerIcon,
   GearIcon,
+  BookmarkIcon,
   BackpackIcon,
 } from '@radix-ui/react-icons'
 
@@ -19,7 +19,7 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
   const navItems = [
     { id: 'jobs', label: 'Jobs', Icon: BackpackIcon },
     { id: 'dashboard', label: 'Dashboard', Icon: LayersIcon },
-    { id: 'contracts', label: 'Contracts', Icon: FileTextIcon },
+    { id: 'contracts', label: 'Contracts', Icon: BookmarkIcon },
     { id: 'time', label: 'Time', Icon: TimerIcon },
     { id: 'settings', label: 'Settings', Icon: GearIcon },
   ] as const

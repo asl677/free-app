@@ -38,8 +38,8 @@ export default function CreateContractPanel({
       animate={{ width: isOpen ? 384 : 0 }}
       exit={{ width: 0 }}
       transition={{ duration: 0.3,  }}
-      className="fixed md:relative right-0 top-0 bg-white border-l border-black flex flex-col h-screen overflow-hidden z-40 md:z-auto"
-      style={{ width: isOpen ? 384 : 0 }}
+      className="fixed md:relative right-0 top-0 bg-white border-l border-black flex flex-col h-screen overflow-hidden"
+      style={{ width: isOpen ? 384 : 0, zIndex: 999999 }}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-6 bg-white flex-shrink-0">
