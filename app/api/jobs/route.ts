@@ -1,27 +1,18 @@
 import { NextResponse } from 'next/server'
 
 // Companies and their job boards for fetching real positions
+// Only includes sources verified to have available job data
 const companySources = [
-  { name: 'Linear', board: 'lever', slug: 'linear' },
-  { name: 'Stripe', board: 'lever', slug: 'stripe' },
-  { name: 'Notion', board: 'lever', slug: 'notion' },
   { name: 'Figma', board: 'greenhouse', slug: 'figma' },
-  { name: 'Vercel', board: 'lever', slug: 'vercel' },
-  { name: 'OpenAI', board: 'workable', slug: 'openai' },
-  { name: 'Anthropic', board: 'lever', slug: 'anthropic' },
-  { name: 'Discord', board: 'lever', slug: 'discord' },
-  { name: 'Airbnb', board: 'greenhouse', slug: 'airbnb' },
   { name: 'Spotify', board: 'greenhouse', slug: 'spotify' },
-  { name: 'GitLab', board: 'lever', slug: 'gitlab' },
+  { name: 'Airbnb', board: 'greenhouse', slug: 'airbnb' },
+  { name: 'Dropbox', board: 'greenhouse', slug: 'dropbox' },
   { name: 'Shopify', board: 'greenhouse', slug: 'shopify' },
   { name: 'GitHub', board: 'greenhouse', slug: 'github' },
-  { name: 'Twilio', board: 'greenhouse', slug: 'twilio' },
-  { name: 'Netflix', board: 'greenhouse', slug: 'netflix' },
   { name: 'Slack', board: 'greenhouse', slug: 'slack' },
-  { name: 'Uber', board: 'greenhouse', slug: 'uber' },
-  { name: 'Dropbox', board: 'greenhouse', slug: 'dropbox' },
-  { name: 'Canva', board: 'greenhouse', slug: 'canva' },
+  { name: 'Netflix', board: 'greenhouse', slug: 'netflix' },
   { name: 'Asana', board: 'greenhouse', slug: 'asana' },
+  { name: 'Canva', board: 'greenhouse', slug: 'canva' },
 ]
 
 interface JobberJob {
@@ -88,9 +79,14 @@ const generateSalary = (title: string, company: string): string => {
 
 async function fetchJobsFromSource(board: string, slug: string, company: string): Promise<Job[]> {
   try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 5000) // 5 second timeout
+
     const response = await fetch(`https://jobber.mihir.ch/${board}/${slug}`, {
-      headers: { 'User-Agent': 'Mozilla/5.0' }
+      headers: { 'User-Agent': 'Mozilla/5.0' },
+      signal: controller.signal
     })
+    clearTimeout(timeout)
 
     if (!response.ok) return []
 
