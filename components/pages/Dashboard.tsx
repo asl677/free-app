@@ -6,6 +6,7 @@ interface DashboardProps {
   onNavigate: (page: any) => void
   totalTimeThisWeek?: string
   contracts?: any[]
+  entries?: any[]
 }
 
 const containerVariants = {
@@ -28,10 +29,16 @@ const itemVariants = {
   },
 }
 
-export default function Dashboard({ onNavigate, totalTimeThisWeek = '0h', contracts = [] }: DashboardProps) {
+export default function Dashboard({ onNavigate, totalTimeThisWeek = '0h', contracts = [], entries = [] }: DashboardProps) {
+  // Calculate total earnings this week
+  const totalEarningsThisWeek = entries.reduce((sum, entry) => {
+    const amount = parseFloat(entry.earnings?.replace('$', '') || '0')
+    return sum + amount
+  }, 0)
+
   const items = [
     { id: 'contracts', title: 'Active Contracts', value: String(contracts.length), action: 'View Contracts →' },
-    { id: 'time', title: 'This Week', value: totalTimeThisWeek, action: 'Track Time' },
+    { id: 'time', title: `$${totalEarningsThisWeek.toFixed(2)} This Week`, value: totalTimeThisWeek, action: 'Track Time' },
   ]
 
   const today = new Date()
