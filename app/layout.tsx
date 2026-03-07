@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import LenisProvider from '@/components/LenisProvider'
 
 export const metadata: Metadata = {
   title: 'Free - A simple freelance job board',
@@ -61,6 +62,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#0f0d0a" />
       </head>
       <body className="bg-dark text-cream font-serif">
+        <LenisProvider />
         {children}
       </body>
     </html>

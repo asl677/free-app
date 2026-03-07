@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { MagnifyingGlassIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { useToast } from '@/components/Toast'
 import CustomDropdown from '@/components/CustomDropdown'
-import Lenis from 'lenis'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -154,27 +153,7 @@ export default function Jobs() {
     }
   }, [])
 
-  // Initialize Lenis smooth scrolling
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    })
-
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-
-    const id = requestAnimationFrame(raf)
-
-    return () => {
-      cancelAnimationFrame(id)
-      lenis.destroy()
-    }
-  }, [])
-
-  useEffect(() => {
+useEffect(() => {
     const interval = setInterval(() => {
       if (lastUpdated) setLastUpdated(new Date(lastUpdated))
     }, 60000)
@@ -329,7 +308,7 @@ export default function Jobs() {
 
           <motion.div
             ref={mainRef}
-            className="px-4 md:px-8 py-4 pb-12 overflow-y-auto"
+            className="px-4 md:px-8 py-4 pb-12"
             animate={{ paddingTop: showSearch ? 224 : 96 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
