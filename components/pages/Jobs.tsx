@@ -225,12 +225,10 @@ export default function Jobs() {
         )}
 
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-0">
-            {filtered.map((job, idx) => (
+            {filtered.map((job) => (
               <motion.a
                 key={job.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.3 + idx * 0.08 }}
+                variants={itemVariants}
                 href={job.url}
                 target="_blank"
                 rel="noopener noreferrer"
