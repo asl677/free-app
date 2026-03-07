@@ -154,7 +154,8 @@ export default function Jobs() {
                        job.company.toLowerCase().includes(search.toLowerCase())
     const matchType = typeFilter === 'All' || job.type === typeFilter
     const matchLocation = locationFilter === 'All' || job.location === locationFilter
-    return matchSearch && matchType && matchLocation
+    const isNotFullTime = job.duration !== 'Full-time'
+    return matchSearch && matchType && matchLocation && isNotFullTime
   })
 
   return (
