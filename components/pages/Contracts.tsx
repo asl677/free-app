@@ -62,12 +62,12 @@ export default function Contracts({ onNavigate, contracts = [], entries = [], on
         <h1 className="text-4xl font-light">Contracts</h1>
         {contracts.length > 0 && (
           <button onClick={() => onNavigate('contracts')} className="bg-coral text-dark px-6 py-3 font-mono text-sm flex items-center gap-2 hover:bg-coral/90">
-            + New Contract
+            + New
           </button>
         )}
       </motion.div>
 
-      <div className="md:px-8 pt-24" style={{ marginRight: selectedContractId ? 384 : 0, transition: 'margin-right 0.3s' }}>
+      <div className="px-4 md:px-8 pt-24" style={{ marginRight: selectedContractId ? 384 : 0, transition: 'margin-right 0.3s' }}>
 
       {contracts.length === 0 ? (
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="flex items-center justify-center min-h-[100dvh] -mt-[100px]">

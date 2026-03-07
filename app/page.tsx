@@ -196,7 +196,7 @@ function HomeContent() {
         <AnimatePresence>
           {isTimerRunning && (
             <motion.div
-              className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-30"
+              className="fixed bottom-20 md:bottom-8 right-4 md:right-8 z-30"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 50 }}

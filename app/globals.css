@@ -33,6 +33,7 @@ html, body {
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: default;
 }
 
 @media (min-width: 768px) {
@@ -44,6 +45,20 @@ html, body {
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+}
+
+/* Animations */
+@keyframes pulse-opacity {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse-text {
+  animation: pulse-opacity 2s ease-in-out infinite;
 }
 
 /* Hide scrollbars */
@@ -65,14 +80,23 @@ div::-webkit-scrollbar {
   color: var(--dark);
 }
 
-/* Buttons */
+/* Buttons & Interactive Elements */
 button {
   font-family: 'DM Mono', monospace;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
 }
 
 button:active {
   transform: scale(0.98);
+}
+
+button:focus, button:focus-visible {
+  outline: none;
+}
+
+a:focus, a:focus-visible {
+  outline: none;
 }
 
 /* Forms */

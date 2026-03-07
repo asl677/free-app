@@ -25,17 +25,17 @@ const itemVariants = {
 
 export default function Settings() {
   const [enabledSources, setEnabledSources] = useState({
-    Lever: true,
-    Greenhouse: true,
-    Workable: true,
+    'Greenhouse': true,
     'Y Combinator': true,
+    'ArbeitsNow': true,
+    'Job Boards': true,
   })
 
   const jobSources = [
-    { name: 'Lever' },
     { name: 'Greenhouse' },
-    { name: 'Workable' },
     { name: 'Y Combinator' },
+    { name: 'ArbeitsNow' },
+    { name: 'Job Boards' },
   ]
 
   const toggleSource = (name: string) => {
@@ -63,10 +63,10 @@ export default function Settings() {
 
           <motion.div
             variants={itemVariants}
-            className="bg-surface pl-0 pr-0 py-4 border-t border-border"
+            className="bg-surface pl-0 pr-0 py-4"
           >
             <p className="text-sm text-cream/70 leading-relaxed">
-              This app helps freelancers manage contracts, track time spent on projects, and discover relevant job opportunities. Built to simplify the admin work of contract work so you can focus on what matters.
+              Remote tech jobs are everywhere but nowhere. This app pulls them together so you're not hunting across 10 different boards. Find opportunities from Y Combinator, Greenhouse, and more in one place.
             </p>
           </motion.div>
 
@@ -80,7 +80,7 @@ export default function Settings() {
             <motion.div
               key={source.name}
               variants={itemVariants}
-              className={`bg-surface pl-0 pr-0 py-4 flex items-center justify-between border-t border-border`}
+              className={`bg-surface pl-0 pr-0 py-2 flex items-center justify-between`}
             >
               <span className="font-mono text-sm">{source.name}</span>
               <button
@@ -108,7 +108,7 @@ export default function Settings() {
 
           <motion.div
             variants={itemVariants}
-            className="bg-surface pl-0 pr-0 py-4 flex items-center justify-between border-t border-border"
+            className="bg-surface pl-0 pr-0 py-4 flex items-center justify-between"
           >
             <a
               href="https://www.linkedin.com/in/latenights/"

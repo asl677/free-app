@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { MagnifyingGlassIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { useToast } from '@/components/Toast'
-import CustomDropdown from '@/components/CustomDropdown'
+import FilterPanel from '@/components/FilterPanel'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,6 +25,7 @@ const itemVariants = {
     transition: { duration: 0.4 },
   },
 }
+
 
 const getSalaryRange = (salaryStr: string): string => {
   const match = salaryStr.match(/(\d+)K-(\d+)K/)
@@ -58,25 +59,51 @@ interface JobsResponse {
   hasMore: boolean
 }
 
+const getEmploymentType = (duration: string): string => {
+  const lowerDuration = duration.toLowerCase()
+  if (lowerDuration === 'full-time') return 'Full-time'
+  if (lowerDuration.includes('part-time') ||
+      lowerDuration.includes('contract') ||
+      lowerDuration.includes('temp') ||
+      lowerDuration.includes('intern') ||
+      lowerDuration.includes('vendor') ||
+      lowerDuration.includes('short term') ||
+      lowerDuration.includes('6 month') ||
+      lowerDuration.includes('3 month')) return 'Fractional'
+  return 'Fractional' // Default to Fractional for ambiguous cases
+}
+
 export default function Jobs() {
   const { addToast } = useToast()
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('All')
   const [locationFilter, setLocationFilter] = useState('All')
   const [sourceFilter, setSourceFilter] = useState('All')
+  const [employmentFilter, setEmploymentFilter] = useState('All')
+  const [salaryFilter, setSalaryFilter] = useState('All')
   const [displayedJobs, setDisplayedJobs] = useState<Job[]>([])
-  const [showSearch, setShowSearch] = useState(false)
+  const [showFilters, setShowFilters] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(true)
   const [endOfListShown, setEndOfListShown] = useState(false)
+  const [isMd, setIsMd] = useState(false)
   const mainRef = useRef<HTMLDivElement>(null)
   const initialFetchDone = useRef(false)
 
+  useEffect(() => {
+    const checkMd = () => setIsMd(window.innerWidth >= 768)
+    checkMd()
+    window.addEventListener('resize', checkMd)
+    return () => window.removeEventListener('resize', checkMd)
+  }, [])
+
   const types = ['All', 'Frontend', 'Backend', 'Full Stack', 'Design', 'Product', 'DevOps', 'Data Science', 'Mobile', 'AI/ML', 'Security', 'Cloud']
   const locations = ['All', 'Remote', 'San Francisco, CA', 'New York, NY', 'Austin, TX', 'Seattle, WA', 'Los Angeles, CA', 'Chicago, IL', 'Boston, MA']
+  const employmentTypes = ['All', 'Full-time', 'Fractional']
+  const salaries = ['All', '$', '$$', '$$$', '$$$$']
 
   // Dynamically derive sources from actual jobs
   const uniqueSources = useMemo(() => {
@@ -150,8 +177,17 @@ export default function Jobs() {
     if (!initialFetchDone.current) {
       initialFetchDone.current = true
       fetchJobs(0)
+      window.scrollTo(0, 0)
     }
   }, [])
+
+  // Ensure scroll container is properly initialized
+  useEffect(() => {
+    if (displayedJobs.length > 0 && mainRef.current) {
+      // Force layout recalculation to ensure scrollability
+      mainRef.current.scrollTop = 0
+    }
+  }, [displayedJobs.length])
 
 useEffect(() => {
     const interval = setInterval(() => {
@@ -197,13 +233,18 @@ useEffect(() => {
     const matchType = typeFilter === 'All' || job.type === typeFilter
     const matchLocation = locationFilter === 'All' || job.location === locationFilter
     const matchSource = sourceFilter === 'All' || job.board === sourceFilter
-    return matchSearch && matchType && matchLocation && matchSource
-  }), [displayedJobs, search, typeFilter, locationFilter, sourceFilter])
+    const matchEmployment = employmentFilter === 'All' || getEmploymentType(job.duration) === employmentFilter
+    const matchSalary = salaryFilter === 'All' || getSalaryRange(job.salary) === salaryFilter
+    return matchSearch && matchType && matchLocation && matchSource && matchEmployment && matchSalary
+  }), [displayedJobs, search, typeFilter, locationFilter, sourceFilter, employmentFilter, salaryFilter])
 
   return (
-    <div className="w-full">
-      <div
-        className="fixed top-0 left-0 right-0 md:left-20 bg-dark z-40 px-4 md:px-8 py-8 flex items-center justify-between"
+    <div className="w-full" style={{ marginRight: isMd && showFilters ? 384 : 0, transition: 'margin-right 0.3s ease-in-out' }}>
+      <motion.div
+        className="fixed top-0 left-0 right-0 md:left-20 bg-dark z-40 px-4 md:px-8 py-[22px] flex items-center justify-between"
+        variants={itemVariants}
+        initial="hidden"
+        animate="visible"
       >
         <h1 className="text-4xl font-light">Jobs</h1>
         <div className="flex items-center gap-4">
@@ -223,112 +264,61 @@ useEffect(() => {
             </button>
           </div>
           <button
-            onClick={() => setShowSearch(!showSearch)}
+            onClick={() => setShowFilters(!showFilters)}
             className="text-cream hover:text-coral transition-colors"
-            aria-label="Toggle search"
+            aria-label="Toggle filters"
           >
             <MagnifyingGlassIcon width={22} height={22} />
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {isLoading ? (
         <div className="flex items-center justify-center min-h-[100dvh]">
-          <p className="text-cream/50 font-mono text-sm">Grabbin' jobs</p>
+          <p className="text-cream/50 font-mono text-sm pulse-text">Grabbin' jobs</p>
         </div>
       ) : (
         <>
-          <motion.div
-            className="fixed top-24 left-0 right-0 md:left-20 z-30 bg-dark"
-            style={{ overflow: 'visible' }}
-            initial={{ maxHeight: 0 }}
-            animate={{ maxHeight: showSearch ? 500 : 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            <div className="hidden md:grid grid-cols-4 gap-2.5 px-4 md:px-8 py-4">
-              <input
-                type="text"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
-                style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
-              />
-              <CustomDropdown
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e)}
-                options={types}
-                displayFormat={(v) => v === 'All' ? 'All Types' : v}
-              />
-              <CustomDropdown
-                value={locationFilter}
-                onChange={(e) => setLocationFilter(e)}
-                options={locations}
-                displayFormat={(v) => v === 'All' ? 'All Locations' : v}
-              />
-              <CustomDropdown
-                value={sourceFilter}
-                onChange={(e) => setSourceFilter(e)}
-                options={uniqueSources}
-                displayFormat={(v) => v === 'All' ? 'All Sources' : v}
-              />
-            </div>
-
-            <div className="md:hidden space-y-2 px-4 md:px-8 py-4">
-              <input
-                type="text"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full px-4 py-3 border border-black transition-colors focus:outline-none focus:border-black focus:ring-0"
-                style={{ backgroundColor: 'white', color: 'black', borderRadius: 0, outline: 'none', boxShadow: 'none' }}
-              />
-              <div className="grid grid-cols-2 gap-2.5">
-                <CustomDropdown
-                  value={typeFilter}
-                  onChange={(e) => setTypeFilter(e)}
-                  options={types}
-                  displayFormat={(v) => v === 'All' ? 'All Types' : v}
-                />
-                <CustomDropdown
-                  value={locationFilter}
-                  onChange={(e) => setLocationFilter(e)}
-                  options={locations}
-                  displayFormat={(v) => v === 'All' ? 'All Locations' : v}
-                />
-              </div>
-              <CustomDropdown
-                value={sourceFilter}
-                onChange={(e) => setSourceFilter(e)}
-                options={uniqueSources}
-                displayFormat={(v) => v === 'All' ? 'All Sources' : v}
-              />
-            </div>
-          </motion.div>
+          <FilterPanel
+            isOpen={showFilters}
+            onClose={() => setShowFilters(false)}
+            search={search}
+            onSearchChange={setSearch}
+            typeFilter={typeFilter}
+            onTypeChange={setTypeFilter}
+            locationFilter={locationFilter}
+            onLocationChange={setLocationFilter}
+            sourceFilter={sourceFilter}
+            onSourceChange={setSourceFilter}
+            employmentFilter={employmentFilter}
+            onEmploymentChange={setEmploymentFilter}
+            salaryFilter={salaryFilter}
+            onSalaryChange={setSalaryFilter}
+            types={types}
+            locations={locations}
+            sources={uniqueSources}
+            employmentTypes={employmentTypes}
+            salaries={salaries}
+          />
 
           <motion.div
             ref={mainRef}
-            className="px-4 md:px-8 py-4 pb-12 overflow-y-auto"
-            style={{ scrollBehavior: 'smooth' }}
-            animate={{ paddingTop: showSearch ? 224 : 96 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="px-4 md:px-8 py-4 pb-0 overflow-y-auto pt-24 min-h-screen"
+            style={{ scrollBehavior: 'smooth', marginRight: isMd && showFilters ? 384 : 0, transition: 'margin-right 0.3s ease-in-out' }}
           >
 
           <motion.div
-            key={`${typeFilter}-${locationFilter}-${search}-${sourceFilter}`}
+            key={`${typeFilter}-${locationFilter}-${search}-${sourceFilter}-${employmentFilter}-${salaryFilter}`}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             className="space-y-0 md:mt-0 mt-4"
           >
             {filtered.map((job) => (
-              <motion.div key={`${job.id}-${job.url}`} className="relative" variants={itemVariants}>
+              <motion.div key={`${job.id}-${job.url}`} className="relative" variants={itemVariants} layout>
                 <motion.div
                   className="absolute top-0 left-0 right-0 h-px bg-border"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.4 }}
-                  style={{ originX: 0 }}
+                  variants={itemVariants}
                 />
                 <motion.a
                   variants={itemVariants}
@@ -336,8 +326,9 @@ useEffect(() => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-surface pl-0 pr-0 py-6 border-t border-border transition-colors cursor-pointer hover:bg-surface/80 flex flex-col"
+                  layout
                 >
-                <div className="flex items-start justify-between mb-4 gap-4 pr-6">
+                <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <h3 className="text-xl font-light mb-1">{job.title}</h3>
                     <p className="text-cream/60 font-mono text-sm">{job.type} • Remote • {getSalaryRange(job.salary)}</p>
@@ -364,30 +355,23 @@ useEffect(() => {
               <div className="text-cream/50 font-mono text-sm">Gobblin'</div>
             </motion.div>
           )}
-
-          {!isLoadingMore && hasMore && displayedJobs.length > 0 && (
-            <motion.div
-              key="load-more"
-              initial={{ opacity: 0, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
-              transition={{ duration: 0.3 }}
-              className="flex justify-center py-4"
-            >
-              <button
-                onClick={() => fetchJobs(offset)}
-                className="px-6 py-3 border border-cream/20 text-cream hover:border-cream/50 hover:bg-surface transition-all font-mono text-sm"
-              >
-                Load More
-              </button>
-            </motion.div>
-          )}
         </AnimatePresence>
 
-        {!hasMore && displayedJobs.length > 0 && (
-          <div className="flex justify-center py-4">
-            <div className="text-cream/50 font-mono text-sm">No more jobs</div>
+        {filtered.length === 0 && displayedJobs.length > 0 && (
+          <div className="flex justify-center items-center min-h-[60vh] mt-16">
+            <div className="text-cream/50 font-mono text-lg text-center">Shit, I found nothin'</div>
           </div>
+        )}
+
+        {!hasMore && displayedJobs.length > 0 && filtered.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex justify-center py-4"
+          >
+            <div className="text-cream/50 font-mono text-sm">No mo jobs</div>
+          </motion.div>
         )}
           </motion.div>
         </>
