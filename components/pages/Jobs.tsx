@@ -191,7 +191,7 @@ export default function Jobs() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="bg-transparent mb-2 pb-10 space-y-4"
+            className="bg-transparent mb-2 pb-10 space-y-4 border-b border-border"
           >
             <input
               type="text"
@@ -242,9 +242,9 @@ export default function Jobs() {
                 href={job.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-surface pl-0 pr-6 py-6 transition-colors cursor-pointer hover:bg-surface/80 flex flex-col"
+                className="bg-surface pl-0 pr-0 py-6 transition-colors cursor-pointer hover:bg-surface/80 flex flex-col"
               >
-                <div className="flex items-start justify-between mb-4 gap-4">
+                <div className="flex items-start justify-between mb-4 gap-4 pr-6">
                   <div className="flex-1">
                     <h3 className="text-xl font-light mb-1">{job.title}</h3>
                     <p className="text-cream/60 font-mono text-sm">{job.type} • {job.duration} • {job.location.split(',')[0]}</p>
