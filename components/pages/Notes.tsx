@@ -54,7 +54,7 @@ export default function Notes() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      // Create new line with current font weight and indentation
+      // Create new line with current font weight
       const newNote: Note = {
         id: Date.now().toString(),
         text: '',
@@ -70,22 +70,6 @@ export default function Notes() {
         if (notes.length > 1) {
           setNotes(notes.slice(0, -1))
         }
-      }
-    } else if (e.key === 'Tab') {
-      e.preventDefault()
-      // Increase indentation
-      const newNotes = [...notes]
-      if (newNotes.length > 0) {
-        newNotes[newNotes.length - 1].indent = Math.min(newNotes[newNotes.length - 1].indent + 1, 5)
-        setNotes(newNotes)
-      }
-    } else if (e.shiftKey && e.key === 'Tab') {
-      e.preventDefault()
-      // Decrease indentation
-      const newNotes = [...notes]
-      if (newNotes.length > 0) {
-        newNotes[newNotes.length - 1].indent = Math.max(newNotes[newNotes.length - 1].indent - 1, 0)
-        setNotes(newNotes)
       }
     }
   }
@@ -134,41 +118,39 @@ export default function Notes() {
       </motion.div>
 
       {/* Font Weight Selection */}
-      <motion.div variants={itemVariants} className="flex gap-3 mb-8">
+      <motion.div variants={itemVariants} className="flex gap-4 mb-8">
         <button
           onClick={() => setFontWeight('regular')}
-          className={`px-4 py-2 border transition-all ${
+          className={`text-sm transition-colors ${
             fontWeight === 'regular'
-              ? 'bg-coral text-dark border-coral'
-              : 'border-cream/30 text-cream hover:border-cream/50'
+              ? 'text-coral'
+              : 'text-cream/60 hover:text-cream'
           }`}
-          style={{ borderRadius: 0 }}
         >
-          <span className="font-normal text-sm">Regular</span>
+          Regular
         </button>
         <button
           onClick={() => setFontWeight('bold')}
-          className={`px-4 py-2 border transition-all ${
+          className={`text-sm transition-colors ${
             fontWeight === 'bold'
-              ? 'bg-coral text-dark border-coral'
-              : 'border-cream/30 text-cream hover:border-cream/50'
+              ? 'text-coral'
+              : 'text-cream/60 hover:text-cream'
           }`}
-          style={{ borderRadius: 0 }}
         >
-          <span className="font-bold text-sm">Bold</span>
+          Bold
         </button>
       </motion.div>
 
       {/* Canvas Area */}
       <motion.div variants={itemVariants} className="flex-1 relative">
-        <div className="w-full h-full bg-dark border border-cream/20 p-8 relative overflow-auto">
+        <div className="w-full h-full bg-dark relative overflow-auto">
           {/* Notes Container */}
           <div className="space-y-1">
             {notes.length === 0 ? (
               <div className="text-cream/40 italic">Start typing...</div>
             ) : (
               notes.map((note, idx) => (
-                <div key={note.id} className={`flex items-start gap-3 pl-${note.indent * 6}`} style={{ paddingLeft: `${note.indent * 24}px` }}>
+                <div key={note.id} className="flex items-start gap-3">
                   {/* Bullet */}
                   <div className="flex-shrink-0 mt-2 w-2 h-2 rounded-full bg-cream/60" />
                   {/* Text */}
@@ -185,7 +167,7 @@ export default function Notes() {
             )}
 
             {/* Active Input Line */}
-            <div className="flex items-start gap-3 relative" style={{ paddingLeft: `${(notes[notes.length - 1]?.indent || 0) * 24}px` }}>
+            <div className="flex items-start gap-3 relative">
               {/* Bullet */}
               <div className="flex-shrink-0 mt-2 w-2 h-2 rounded-full bg-cream/60" />
 
@@ -233,7 +215,7 @@ export default function Notes() {
 
       {/* Footer Info */}
       <motion.div variants={itemVariants} className="mt-8 text-cream/50 text-sm">
-        <p>Tab to indent • Shift+Tab to unindent • Enter for new bullet</p>
+        <p>Enter for new bullet</p>
       </motion.div>
     </motion.div>
   )
