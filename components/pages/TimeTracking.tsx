@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PlayIcon, StopIcon } from '@radix-ui/react-icons'
 
@@ -49,6 +49,12 @@ interface TimeTrackingProps {
 
 export default function TimeTracking({ contracts = [], selectedContractId = null, onSelectContract, isRunning = false, time = 0, onStart, onStop, onSaveEntry, entries = [] }: TimeTrackingProps) {
   const timeRef = useRef(0)
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
+
+  const handleClear = () => {
+    localStorage.removeItem('timeEntries')
+    setShowClearConfirm(false)
+  }
 
   useEffect(() => {
     timeRef.current = time
@@ -64,13 +70,43 @@ export default function TimeTracking({ contracts = [], selectedContractId = null
   return (
     <div className="w-full">
       <style>{selectStyle}</style>
-      <motion.h1 variants={itemVariants} initial="hidden" animate="visible"
-        className="fixed top-0 left-0 right-0 md:left-20 bg-dark z-40 px-4 md:px-8 py-8 text-4xl font-light"
+      <motion.div variants={itemVariants} initial="hidden" animate="visible"
+        className="fixed top-0 left-0 right-0 md:left-20 bg-dark z-40 px-4 md:px-8 py-8 flex items-center justify-between"
       >
-        Time Tracking
-      </motion.h1>
+        <h1 className="text-4xl font-light">Time Tracking</h1>
+        <button
+          onClick={() => setShowClearConfirm(true)}
+          className="text-coral hover:text-coral/80 transition-colors font-mono text-sm"
+        >
+          Clear entries
+        </button>
+      </motion.div>
 
       <div className="px-4 md:px-8 py-4 pt-24">
+      {showClearConfirm && (
+        <motion.div variants={itemVariants} initial="hidden" animate="visible"
+          className="bg-surface pl-0 pr-0 py-0 mb-8"
+        >
+          <div className="px-4 py-3 text-cream text-sm mb-3">
+            Are you sure? This cannot be undone.
+          </div>
+          <div className="flex gap-2 px-4 pb-3">
+            <button
+              onClick={handleClear}
+              className="flex-1 px-4 py-2 bg-coral text-dark hover:bg-coral/90 font-mono text-sm transition-colors"
+            >
+              Clear
+            </button>
+            <button
+              onClick={() => setShowClearConfirm(false)}
+              className="flex-1 px-4 py-2 border border-cream/30 text-cream hover:bg-dark/50 font-mono text-sm transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </motion.div>
+      )}
+
       <motion.div variants={containerVariants} initial="hidden" animate="visible">
         <motion.div variants={itemVariants} className="mb-4">
           <div className="text-7xl text-mint font-sans font-medium tracking-tight">
