@@ -100,7 +100,7 @@ export async function GET() {
     salary: formatSalary(job.salary),
     location: job.location,
     duration: job.duration,
-    url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(job.title)}&location=${encodeURIComponent(job.location)}`,
+    url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.company)}`,
     board: 'linkedin.com'
   }))
 
