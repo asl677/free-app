@@ -28,6 +28,7 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([])
   const [borderDims, setBorderDims] = useState({ top: 0, height: 48, left: 0, width: 100 })
   const [isDesktop, setIsDesktop] = useState(false)
+  const [showBorder, setShowBorder] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -60,6 +61,12 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
     }
   }, [activeIndex, isDesktop])
 
+  useEffect(() => {
+    // Fade in the border after page loads
+    const timer = setTimeout(() => setShowBorder(true), 300)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <>
       <div className="fixed bottom-0 md:hidden left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white pointer-events-none z-50" />
@@ -67,11 +74,13 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
         {/* Animated active border - top on mobile, left on desktop */}
         <motion.div
           className="absolute bg-black z-10"
+          initial={{ opacity: 0 }}
           animate={{
             top: borderDims.top,
             height: borderDims.height,
             left: borderDims.left,
             width: borderDims.width,
+            opacity: showBorder ? 1 : 0,
           }}
           transition={{
             type: 'spring',
