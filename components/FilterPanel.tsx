@@ -62,9 +62,9 @@ export default function FilterPanel({
 
           {/* Panel */}
           <motion.div
-            initial={{ x: '100%' }}
+            initial={{ x: 'calc(100% + 10px)' }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            exit={{ x: 'calc(100% + 10px)' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="fixed inset-0 md:inset-auto md:top-0 md:right-0 md:w-96 md:h-screen bg-white md:bg-dark z-50 overflow-y-auto border-l border-black/10 md:border-black"
             style={{ right: '-10px' }}
