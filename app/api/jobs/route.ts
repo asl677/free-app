@@ -1,18 +1,12 @@
 import { NextResponse } from 'next/server'
 
 // Companies and their job boards for fetching real positions
-// Only includes sources verified to have available job data
+// Only sources that actually have job listings
 const companySources = [
   { name: 'Figma', board: 'greenhouse', slug: 'figma' },
-  { name: 'Spotify', board: 'greenhouse', slug: 'spotify' },
   { name: 'Airbnb', board: 'greenhouse', slug: 'airbnb' },
   { name: 'Dropbox', board: 'greenhouse', slug: 'dropbox' },
-  { name: 'Shopify', board: 'greenhouse', slug: 'shopify' },
-  { name: 'GitHub', board: 'greenhouse', slug: 'github' },
-  { name: 'Slack', board: 'greenhouse', slug: 'slack' },
-  { name: 'Netflix', board: 'greenhouse', slug: 'netflix' },
   { name: 'Asana', board: 'greenhouse', slug: 'asana' },
-  { name: 'Canva', board: 'greenhouse', slug: 'canva' },
 ]
 
 interface JobberJob {
@@ -92,17 +86,22 @@ async function fetchJobsFromSource(board: string, slug: string, company: string)
 
     const jobs: JobberJob[] = await response.json()
 
-    return jobs.map((job) => ({
-      id: Math.random() * 10000,
-      title: job.title,
-      company: company,
-      type: getJobType(job.title),
-      salary: generateSalary(job.title, company),
-      location: job.location || 'Remote',
-      duration: '6 months',
-      url: job.link,
-      board: company
-    }))
+    return jobs.map((job, idx) => {
+      const durations = ['3 months', '6 months', '1 year', 'Full-time', 'Contract']
+      const duration = durations[(idx + company.charCodeAt(0)) % durations.length]
+
+      return {
+        id: Math.random() * 10000,
+        title: job.title,
+        company: company,
+        type: getJobType(job.title),
+        salary: generateSalary(job.title, company),
+        location: job.location || 'Remote',
+        duration: duration,
+        url: job.link,
+        board: company
+      }
+    })
   } catch (error) {
     console.error(`Failed to fetch jobs for ${company}:`, error)
     return []
