@@ -24,6 +24,16 @@ const itemVariants = {
   },
 }
 
+const breathingVariants = {
+  animate: {
+    opacity: [0.5, 1, 0.5],
+    transition: {
+      duration: 2.4,
+      repeat: Infinity,
+    },
+  },
+}
+
 interface Job {
   id: number
   title: string
@@ -171,17 +181,17 @@ export default function Jobs() {
 
       {isLoading ? (
         <div className="flex items-center justify-center min-h-[100dvh]">
-          <p className="text-cream/50 font-mono text-sm">Gettin'</p>
+          <motion.p variants={breathingVariants} animate="animate" className="text-cream/50 font-mono text-sm">Gettin'</motion.p>
         </div>
       ) : (
-        <div ref={mainRef} className="px-4 md:px-8 py-4 pt-24 pb-32 overflow-y-auto">
+        <div ref={mainRef} className="px-4 md:px-8 py-4 pt-24 pb-12 overflow-y-auto">
           {showSearch && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="bg-transparent mb-2 space-y-4"
+            className="bg-transparent mb-2 pb-10 space-y-4 border-b border-border"
           >
             <input
               type="text"
