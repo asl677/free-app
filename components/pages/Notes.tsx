@@ -150,53 +150,49 @@ export default function Notes() {
               <div className="text-cream/40 italic">Start typing...</div>
             ) : (
               notes.map((note, idx) => (
-                <div key={note.id} className="flex items-start gap-3">
-                  {/* Bullet */}
-                  <div className="flex-shrink-0 mt-2 w-2 h-2 rounded-full bg-cream/60" />
-                  {/* Text */}
-                  <div
-                    className={`flex-1 leading-relaxed break-words ${
-                      note.isBold ? 'font-bold' : 'font-normal'
-                    }`}
-                    style={{ color: '#ede0c8' }}
-                  >
-                    {note.text}
-                  </div>
+                <div
+                  key={note.id}
+                  className={`leading-relaxed break-words ${
+                    note.isBold ? 'font-bold' : 'font-normal'
+                  }`}
+                  style={{ color: '#000000' }}
+                >
+                  • {note.text}
                 </div>
               ))
             )}
 
             {/* Active Input Line */}
-            <div className="flex items-start gap-3 relative">
-              {/* Bullet */}
-              <div className="flex-shrink-0 mt-2 w-2 h-2 rounded-full bg-cream/60" />
+            <div className="relative">
+              <span style={{ color: '#000000' }}>• </span>
+              <div
+                ref={canvasRef}
+                contentEditable
+                suppressContentEditableWarning
+                onKeyDown={handleKeyDown}
+                onInput={(e) => {
+                  const text = e.currentTarget.innerText.replace(/^• /, '')
+                  handleInput(text)
+                }}
+                className={`outline-none leading-relaxed min-h-6 break-words inline-block ${
+                  fontWeight === 'bold' ? 'font-bold' : 'font-normal'
+                }`}
+                style={{
+                  color: '#000000',
+                  caretColor: 'transparent',
+                  display: 'inline',
+                  width: 'auto',
+                }}
+              />
 
-              {/* Editable Input with Cursor */}
-              <div className="flex-1 relative">
-                <div
-                  ref={canvasRef}
-                  contentEditable
-                  suppressContentEditableWarning
-                  onKeyDown={handleKeyDown}
-                  onInput={(e) => handleInput(e.currentTarget.innerText)}
-                  className={`outline-none leading-relaxed min-h-6 break-words ${
-                    fontWeight === 'bold' ? 'font-bold' : 'font-normal'
-                  }`}
-                  style={{
-                    color: '#ede0c8',
-                    caretColor: 'transparent', // Hide default caret
-                  }}
-                />
-
-                {/* Custom Black Cursor */}
-                <div
-                  ref={cursorRef}
-                  className="absolute left-0 top-0 w-0.5 h-6 bg-black pointer-events-none"
-                  style={{
-                    animation: 'blink 1s infinite',
-                  }}
-                />
-              </div>
+              {/* Custom Black Cursor */}
+              <div
+                ref={cursorRef}
+                className="absolute w-0.5 h-6 bg-black pointer-events-none"
+                style={{
+                  animation: 'blink 1s infinite',
+                }}
+              />
             </div>
           </div>
         </div>
