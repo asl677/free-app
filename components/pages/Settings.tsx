@@ -3,6 +3,17 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.3,
+    },
+  },
+}
+
 const itemVariants = {
   hidden: { opacity: 0, y: 10 },
   visible: {
@@ -48,15 +59,12 @@ export default function Settings() {
           Job Sources
         </motion.h2>
 
-        <div className="space-y-0">
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-0">
           {jobSources.map((source, idx) => (
             <motion.div
               key={source.name}
               variants={itemVariants}
-              transition={{ delay: idx * 0.05 + 0.3 }}
-              initial="hidden"
-              animate="visible"
-              className={`bg-surface pl-0 pr-6 py-4 flex items-center justify-between ${idx > 0 ? 'border-t border-border' : ''}`}
+              className={`bg-surface pl-0 pr-0 py-4 flex items-center justify-between border-t border-border ${idx === 0 ? '' : ''}`}
             >
               <span className="font-mono text-sm">{source.name}</span>
               <button
@@ -75,7 +83,7 @@ export default function Settings() {
               </button>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   )
