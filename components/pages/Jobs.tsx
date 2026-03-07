@@ -134,7 +134,12 @@ export default function Jobs() {
                        job.company.toLowerCase().includes(search.toLowerCase())
     const matchType = typeFilter === 'All' || job.type === typeFilter
     const matchLocation = locationFilter === 'All' || job.location === locationFilter
-    return matchSearch && matchType && matchLocation
+    // Filter for contract and freelance roles
+    const isContractOrFreelance = job.title.toLowerCase().includes('contract') ||
+                                  job.title.toLowerCase().includes('freelance') ||
+                                  job.title.toLowerCase().includes('consultant') ||
+                                  job.title.toLowerCase().includes('short-term')
+    return matchSearch && matchType && matchLocation && isContractOrFreelance
   })
 
   return (
@@ -220,10 +225,12 @@ export default function Jobs() {
         )}
 
         {isLoading ? (
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-3">
-            {[...Array(5)].map((_, i) => (
-              <motion.div key={i} variants={itemVariants} className="bg-surface pl-0 pr-6 py-6 border-t border-border animate-pulse" />
-            ))}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center justify-center min-h-[200px]"
+          >
+            <p className="text-cream/50 font-mono text-sm">Fetching jobs...</p>
           </motion.div>
         ) : (
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-0">
