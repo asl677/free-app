@@ -60,6 +60,32 @@ const getJobType = (title: string): string => {
   return 'Full Stack'
 }
 
+const generateSalary = (title: string, company: string): string => {
+  const lowerTitle = title.toLowerCase()
+
+  // Use company name and title to generate varied salaries
+  const seed = (company + title).split('').reduce((a, b) => a + b.charCodeAt(0), 0)
+  const isHighLevel = lowerTitle.includes('principal') || lowerTitle.includes('lead') || lowerTitle.includes('senior') || lowerTitle.includes('architect')
+  const isML = lowerTitle.includes('ml') || lowerTitle.includes('machine learning') || lowerTitle.includes('ai')
+
+  let baseMin = 90
+  let baseMax = 160
+
+  if (isML) {
+    baseMin = 140
+    baseMax = 280
+  } else if (isHighLevel) {
+    baseMin = 130
+    baseMax = 240
+  }
+
+  const variance = (seed % 40) - 20
+  const min = baseMin + variance
+  const max = baseMax + variance
+
+  return `${Math.round(min)}K-${Math.round(max)}K`
+}
+
 async function fetchJobsFromSource(board: string, slug: string, company: string): Promise<Job[]> {
   try {
     const response = await fetch(`https://jobber.mihir.ch/${board}/${slug}`, {
@@ -75,7 +101,7 @@ async function fetchJobsFromSource(board: string, slug: string, company: string)
       title: job.title,
       company: company,
       type: getJobType(job.title),
-      salary: '80K-180K',
+      salary: generateSalary(job.title, company),
       location: job.location || 'Remote',
       duration: '6 months',
       url: job.link,

@@ -169,7 +169,7 @@ export default function Jobs() {
         </div>
       </motion.div>
 
-      <div ref={mainRef} className="px-4 md:px-8 py-4 pt-24 overflow-y-auto" style={{ height: 'calc(100dvh - 80px)' }}>
+      <div ref={mainRef} className="px-4 md:px-8 py-4 pt-24 pb-32 overflow-y-auto" style={{ height: 'calc(100dvh - 80px)' }}>
         {showSearch && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -244,7 +244,7 @@ export default function Jobs() {
                     <p className="text-cream/60 font-mono text-sm">{job.type} • {job.company} • {job.duration} • {job.location}</p>
                   </div>
                   <div className="flex-shrink-0">
-                    <p className="text-3xl md:text-6xl text-mint font-sans font-medium text-right whitespace-nowrap">{job.salary}</p>
+                    <p className="text-xl md:text-3xl text-mint font-sans font-medium text-right whitespace-nowrap">{job.salary}</p>
                   </div>
                 </div>
               </motion.a>
