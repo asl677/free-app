@@ -38,7 +38,7 @@ export default function Dashboard({ onNavigate, totalTimeThisWeek = '0h', contra
 
   const items = [
     { id: 'contracts', title: 'Active Contracts', value: String(contracts.length), action: 'View Contracts →' },
-    { id: 'time', title: `$${totalEarningsThisWeek.toFixed(2)} This Week`, value: totalTimeThisWeek, action: 'Track Time' },
+    { id: 'time', title: 'Hours Tracked', value: totalTimeThisWeek, action: 'Track Time' },
   ]
 
   const today = new Date()
@@ -46,17 +46,21 @@ export default function Dashboard({ onNavigate, totalTimeThisWeek = '0h', contra
 
   return (
     <div className="w-full">
-      <motion.h1 variants={itemVariants} initial="hidden" animate="visible"
-        className="fixed top-0 left-0 right-0 md:left-20 bg-dark z-40 px-4 md:px-8 py-8 text-4xl font-light"
+      <motion.div variants={itemVariants} initial="hidden" animate="visible"
+        className="fixed top-0 left-0 right-0 md:left-20 bg-dark z-40 px-4 md:px-8 py-8 md:py-8 pb-12 md:pb-8 flex md:flex-row flex-col items-start md:items-center justify-between gap-6 md:gap-0"
       >
-        Work
-      </motion.h1>
+        <h1 className="text-4xl font-light">Work</h1>
+        <div className="mt-8 md:mt-0 mb-4 md:mb-0">
+          <p className="text-3xl text-mint font-sans font-medium">${totalEarningsThisWeek.toFixed(2)}</p>
+          <p className="text-cream/60 font-mono text-xs">This Week</p>
+        </div>
+      </motion.div>
       <motion.p variants={itemVariants} initial="hidden" animate="visible"
         className="fixed top-20 left-0 right-0 md:left-20 bg-dark px-4 md:px-8 text-cream/60 font-mono text-sm mb-8 pt-0 z-39"
       >
         {dateString}
       </motion.p>
-      <div className="pt-40 py-8">
+      <div className="pt-52 md:pt-40 py-8">
       <motion.div className="px-4 md:px-8 grid grid-cols-1 gap-6" variants={containerVariants} initial="hidden" animate="visible">
         {items.map((item, idx) => (
           <div key={item.id}>

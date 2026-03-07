@@ -116,7 +116,7 @@ export default function Jobs() {
 
   useEffect(() => {
     fetchJobs(0)
-  }, [fetchJobs])
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
