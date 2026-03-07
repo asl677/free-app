@@ -226,7 +226,7 @@ export default function Jobs() {
 
             <div className="grid grid-cols-2 gap-2.5 pb-6">
               <div>
-                <label className="block text-sm font-medium text-dark mb-2">TYPE</label>
+                <label className="block text-sm font-medium text-cream mb-2">TYPE</label>
                 <select
                   value={typeFilter}
                   onChange={(e) => setTypeFilter(e.target.value)}
@@ -240,7 +240,7 @@ export default function Jobs() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-dark mb-2">LOCATION</label>
+                <label className="block text-sm font-medium text-cream mb-2">LOCATION</label>
                 <select
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
