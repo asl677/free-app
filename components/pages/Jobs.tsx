@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { MagnifyingGlassIcon, ReloadIcon } from '@radix-ui/react-icons'
+import { useToast } from '@/components/Toast'
 
 const containerVariants = {
   visible: {
@@ -51,6 +52,7 @@ interface JobsResponse {
 }
 
 export default function Jobs() {
+  const { addToast } = useToast()
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('All')
   const [locationFilter, setLocationFilter] = useState('All')
@@ -61,6 +63,7 @@ export default function Jobs() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [offset, setOffset] = useState(0)
   const [hasMore, setHasMore] = useState(true)
+  const [endOfListShown, setEndOfListShown] = useState(false)
   const mainRef = useRef<HTMLDivElement>(null)
 
   const types = ['All', 'Frontend', 'Backend', 'Full Stack', 'Design', 'Product', 'DevOps', 'Data Science', 'Mobile', 'AI/ML', 'Security', 'Cloud']
@@ -136,6 +139,14 @@ export default function Jobs() {
     main.addEventListener('scroll', handleScroll)
     return () => main.removeEventListener('scroll', handleScroll)
   }, [offset, hasMore, isLoadingMore, fetchJobs])
+
+  // Show "End of List" toast when reaching the end
+  useEffect(() => {
+    if (!hasMore && displayedJobs.length > 0 && !endOfListShown) {
+      addToast('End of List', 'success')
+      setEndOfListShown(true)
+    }
+  }, [hasMore, displayedJobs.length, endOfListShown, addToast])
 
   const filtered = displayedJobs.filter(job => {
     const matchSearch = job.title.toLowerCase().includes(search.toLowerCase()) ||
