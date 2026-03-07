@@ -89,7 +89,7 @@ async function fetchYCJobs(): Promise<Job[]> {
     }
 
     const jobIds: number[] = await response.json()
-    const jobsToFetch = jobIds.slice(0, 30) // Fetch first 30 job IDs to get more results
+    const jobsToFetch = jobIds.slice(0, 100) // Fetch first 100 job IDs to get more YC results
 
     // Fetch individual job details in parallel
     const jobDetails = await Promise.all(
@@ -102,14 +102,20 @@ async function fetchYCJobs(): Promise<Job[]> {
       )
     )
 
-    // Filter and map Y Combinator company jobs (look for ycombinator.com URLs or YC company names)
+    // Filter and map Y Combinator company jobs (look for ycombinator.com URLs or YC indicators in title)
     const ycJobs = jobDetails
-      .filter((job): job is any =>
-        job !== null &&
-        job.title &&
-        (job.url?.includes('ycombinator.com') || job.title.toLowerCase().includes('yc '))
-      )
-      .slice(0, 30) // Get up to 30 real YC jobs
+      .filter((job): job is any => {
+        if (!job || !job.title) return false
+        const titleLower = job.title.toLowerCase()
+        // Match: ycombinator.com URLs, "(YC ...)" in title, "yc " anywhere, or "y combinator"
+        return (
+          job.url?.includes('ycombinator.com') ||
+          titleLower.includes('(yc ') ||
+          titleLower.includes('yc ') ||
+          titleLower.includes('y combinator')
+        )
+      })
+      .slice(0, 50) // Get up to 50 real YC jobs
       .map((job) => {
         // Extract company name from URL or title
         let companyName = 'Y Combinator'
@@ -147,21 +153,23 @@ async function fetchYCJobs(): Promise<Job[]> {
   } catch (error) {
     console.error('Failed to fetch Y Combinator jobs from HN:', error)
 
-    // Fallback to sample data if API fails
+    // Fallback to sample data if API fails (with varied contract types and locations)
     const fallbackJobs = [
-      { title: 'Senior Full Stack Engineer at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs' },
-      { title: 'Product Manager at YC Company', company: 'Y Combinator', location: 'San Francisco, CA', url: 'https://news.ycombinator.com/jobs' },
-      { title: 'Backend Engineer at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs' },
-      { title: 'Frontend Engineer at YC Company', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs' },
-      { title: 'DevOps Engineer at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs' },
-      { title: 'Data Scientist at YC Company', company: 'Y Combinator', location: 'San Francisco, CA', url: 'https://news.ycombinator.com/jobs' },
-      { title: 'Design Lead at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs' },
-      { title: 'Sales Engineer at YC Company', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs' },
-      { title: 'Solutions Architect at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs' },
-      { title: 'ML Engineer at YC Company', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs' },
+      { title: 'Senior Full Stack Engineer at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs/1' },
+      { title: 'Product Manager at YC Company', company: 'Y Combinator', location: 'San Francisco, CA', url: 'https://news.ycombinator.com/jobs/2' },
+      { title: 'Backend Engineer at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs/3' },
+      { title: 'Frontend Engineer at YC Company', company: 'Y Combinator', location: 'New York, NY', url: 'https://news.ycombinator.com/jobs/4' },
+      { title: 'DevOps Engineer at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs/5' },
+      { title: 'Data Scientist at YC Company', company: 'Y Combinator', location: 'San Francisco, CA', url: 'https://news.ycombinator.com/jobs/6' },
+      { title: 'Design Lead at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs/7' },
+      { title: 'Sales Engineer at YC Company', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs/8' },
+      { title: 'Solutions Architect at YC Startup', company: 'Y Combinator', location: 'Austin, TX', url: 'https://news.ycombinator.com/jobs/9' },
+      { title: 'ML Engineer at YC Company', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs/10' },
+      { title: 'Platform Engineer at YC Startup', company: 'Y Combinator', location: 'Remote', url: 'https://news.ycombinator.com/jobs/11' },
+      { title: 'Security Engineer at YC Company', company: 'Y Combinator', location: 'San Francisco, CA', url: 'https://news.ycombinator.com/jobs/12' },
     ]
 
-    return fallbackJobs.map((job, idx) => ({
+    const fallbackResult = fallbackJobs.map((job, idx) => ({
       id: Math.random() * 10000,
       title: job.title,
       company: job.company,
@@ -172,6 +180,9 @@ async function fetchYCJobs(): Promise<Job[]> {
       url: job.url,
       board: 'Y Combinator'
     }))
+
+    console.log('Fallback Y Combinator jobs count:', fallbackResult.length)
+    return fallbackResult
   }
 }
 
@@ -234,12 +245,27 @@ export async function GET(request: Request) {
     let allJobs = allJobsArrays.flat()
     console.log('Total jobs before shuffle:', allJobs.length)
 
+    // Debug: Check Y Combinator jobs BEFORE shuffle
+    const ycJobsBeforeShuffle = allJobs.filter(j => j.board === 'Y Combinator')
+    console.log('Y Combinator jobs before shuffle:', ycJobsBeforeShuffle.length)
+    if (ycJobsBeforeShuffle.length > 0) {
+      console.log('Sample YC job:', ycJobsBeforeShuffle[0])
+    }
+
     // Shuffle jobs for variety
     allJobs = allJobs.sort(() => Math.random() - 0.5)
+
+    // Check Y Combinator jobs AFTER shuffle but BEFORE dedup
+    const ycJobsAfterShuffle = allJobs.filter(j => j.board === 'Y Combinator')
+    console.log('Y Combinator jobs after shuffle:', ycJobsAfterShuffle.length)
 
     // Remove duplicates by URL
     const uniqueJobs = Array.from(new Map(allJobs.map(job => [job.url, job])).values())
     console.log('Total unique jobs after dedup:', uniqueJobs.length)
+
+    // Check Y Combinator jobs AFTER dedup
+    const ycJobsAfterDedup = uniqueJobs.filter(j => j.board === 'Y Combinator')
+    console.log('Y Combinator jobs after dedup:', ycJobsAfterDedup.length)
 
     // Apply pagination
     const paginatedJobs = uniqueJobs.slice(offset, offset + limit)
